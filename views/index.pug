@@ -1,0 +1,207 @@
+extends layout
+
+block content
+  nav#mainNav.navbar.navbar-expand-lg.navbar-light.fixed-top
+      .container
+        a.navbar-brand.js-scroll-trigger(href="#page-top") Bibliotecas Públicas
+        button.navbar-toggler.navbar-toggler-right(type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation")
+          span.navbar-toggler-icon
+        #navbarResponsive.collapse.navbar-collapse
+          ul.navbar-nav.ml-auto
+            li.nav-item
+              a.nav-link.js-scroll-trigger(href="#about") acerca de
+            li.nav-item
+              a.nav-link.js-scroll-trigger(href="#mapa") Mapa
+            li.nav-item
+              a.nav-link.js-scroll-trigger(href="#contact") Contactanos
+  header.masthead.text-center.text-white.d-flex
+      .container.my-auto
+        .row
+          .col-lg-10.mx-auto
+            h1.text-uppercase
+              strong Red Nacional de Bibliotecas Públicas
+            hr
+          .col-lg-8.mx-auto
+            p.text-faded.mb-5
+              | Fomentamos la lectura y la escritura a través del trabajo colaborativo entre la Red Nacional de Bibliotecas Públicas y los bibliotecarios alrededor del país.
+            a.btn.btn-primary.btn-xl.js-scroll-trigger(href="#about") Saber más
+  
+  section#about.bg-primary
+    .container
+        .row
+          .col-lg-8.mx-auto.text-center
+            h2.section-heading.text-white ¡Aqui encontraras!
+            hr.light.my-4
+            p.text-faded.mb-4
+              | La ubicación de las bibliotecas que conforman la Red Nacional de Bibliotecas Públicas de Colombia.
+            a.btn.btn-light.btn-xl.js-scroll-trigger(href="#mapa") Empezar!
+
+  //section#services
+      .container
+        .row
+          .col-lg-12.text-center
+            h2.section-heading At Your Service
+            hr.my-4
+      .container
+        .row
+          .col-lg-3.col-md-6.text-center
+            .service-box.mt-5.mx-auto
+              i.fa.fa-4x.fa-diamond.text-primary.mb-3.sr-icons
+              h3.mb-3 Sturdy Templates
+              p.text-muted.mb-0 Our templates are updated regularly so they don't break.
+          .col-lg-3.col-md-6.text-center
+            .service-box.mt-5.mx-auto
+              i.fa.fa-4x.fa-paper-plane.text-primary.mb-3.sr-icons
+              h3.mb-3 Ready to Ship
+              p.text-muted.mb-0 You can use this theme as is, or you can make changes!
+          .col-lg-3.col-md-6.text-center
+            .service-box.mt-5.mx-auto
+              i.fa.fa-4x.fa-newspaper-o.text-primary.mb-3.sr-icons
+              h3.mb-3 Up to Date
+              p.text-muted.mb-0 We update dependencies to keep things fresh.
+          .col-lg-3.col-md-6.text-center
+            .service-box.mt-5.mx-auto
+              i.fa.fa-4x.fa-heart.text-primary.mb-3.sr-icons
+              h3.mb-3 Made with Love
+              p.text-muted.mb-0 You have to make your websites with love these days!
+
+  section#mapa.bg-dark.text-white
+      .container
+        .row
+          .col-lg-12.text-center
+            i.fa.fa-4x.fa-map-marker.text-primary.mb-3.sr-icons
+            h2.section-heading Ubicación de las Bibliotecas Públicas
+            hr.my-4
+      .container
+        .row
+          .col-lg-3.col-md-6.text-center
+            .service-box.mt-5.mx-auto
+              #map
+                script(src="awesome/dist/leaflet.awesome-markers.js")
+                script.
+                  var myIcon = L.icon({
+                    iconUrl: '/img/marker2.png',
+                    iconSize: [30, 30],
+                    iconAnchor: [15, 30],
+                    popupAnchor: [0, -30],
+                    shadowUrl: 'my-icon-shadow.png',
+                    shadowSize: [68, 95],
+                    shadowAnchor: [22, 94]
+                  });
+                  var myIcon2 = L.icon({
+                    iconUrl: '/img/marker1.png',
+                    iconSize: [30, 30],
+                    iconAnchor: [15, 30],
+                    popupAnchor: [-0, -30],
+                    shadowUrl: 'my-icon-shadow.png',
+                    shadowSize: [68, 95],
+                    shadowAnchor: [22, 94]
+                  });
+                  // alert(`aquí --> #{data[0].barrio}`);
+                  var map = L.map('map').setView([4.0000000, -72.0000000], 5.45);                                                    
+                  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                    {
+                      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> ',
+                      maxZoom: 18,
+                      minZoom: 0,
+                    }).addTo(map);
+                  L.geoJson(departamentos).addTo(map); 
+                each biblioteca in data
+                  script.
+                    var cadena = `#{biblioteca.georeferencia}`;
+                    cadena = cadena.replace("°","");
+                    cadena = cadena.replace("°","");
+                    cadena = cadena.replace("(","");
+                    cadena = cadena.replace(")","");
+                    var parts = cadena.split(",");
+                    var lat= parseFloat(parts[0]);
+                    var long= parseFloat(parts[1]);
+                    var estado = 'ABIERTA';
+                    if(estado==`#{biblioteca.estado_de_la_biblioteca}`){
+                      var coor = L.marker([lat,long], {icon: myIcon}).addTo(map) .bindPopup(`<h6><center>#{biblioteca.nombre_de_la_biblioteca}</center></h6> <hr> <h6>Dirección:<h6> #{biblioteca.direcci_n_de_la_biblioteca} <br> <center>#{biblioteca.municipio} - #{biblioteca.departamento}</center>`) .openPopup();
+                    }else{
+                      var coor = L.marker([lat,long], {icon: myIcon2}).addTo(map) .bindPopup(`<h6><center>#{biblioteca.nombre_de_la_biblioteca}</center></h6> <hr> <h6>Dirección:<h6> #{biblioteca.direcci_n_de_la_biblioteca} <br> <center>#{biblioteca.municipio} - #{biblioteca.departamento}</center>`) .openPopup();
+                    }
+
+  //section#portfolio.p-0
+      .container-fluid.p-0
+        .row.no-gutters.popup-gallery
+          .col-lg-4.col-sm-6
+            a.portfolio-box(href="img/portfolio/fullsize/1.jpg")
+              img.img-fluid(src="img/portfolio/thumbnails/1.jpg" alt="")
+              .portfolio-box-caption
+                .portfolio-box-caption-content
+                  .project-category.text-faded
+                    | Category
+                  .project-name
+                    | Project Name
+          .col-lg-4.col-sm-6
+            a.portfolio-box(href="img/portfolio/fullsize/2.jpg")
+              img.img-fluid(src="img/portfolio/thumbnails/2.jpg" alt="")
+              .portfolio-box-caption
+                .portfolio-box-caption-content
+                  .project-category.text-faded
+                    | Category
+                  .project-name
+                    | Project Name
+          .col-lg-4.col-sm-6
+            a.portfolio-box(href="img/portfolio/fullsize/3.jpg")
+              img.img-fluid(src="img/portfolio/thumbnails/3.jpg" alt="")
+              .portfolio-box-caption
+                .portfolio-box-caption-content
+                  .project-category.text-faded
+                    | Category
+                  .project-name
+                    | Project Name
+          .col-lg-4.col-sm-6
+            a.portfolio-box(href="img/portfolio/fullsize/4.jpg")
+              img.img-fluid(src="img/portfolio/thumbnails/4.jpg" alt="")
+              .portfolio-box-caption
+                .portfolio-box-caption-content
+                  .project-category.text-faded
+                    | Category
+                  .project-name
+                    | Project Name
+          .col-lg-4.col-sm-6
+            a.portfolio-box(href="img/portfolio/fullsize/5.jpg")
+              img.img-fluid(src="img/portfolio/thumbnails/5.jpg" alt="")
+              .portfolio-box-caption
+                .portfolio-box-caption-content
+                  .project-category.text-faded
+                    | Category
+                  .project-name
+                    | Project Name
+          .col-lg-4.col-sm-6
+            a.portfolio-box(href="img/portfolio/fullsize/6.jpg")
+              img.img-fluid(src="img/portfolio/thumbnails/6.jpg" alt="")
+              .portfolio-box-caption
+                .portfolio-box-caption-content
+                  .project-category.text-faded
+                    | Category
+                  .project-name
+                    | Project Name
+
+  //section.bg-dark.text-white
+      .container.text-center
+        h2.mb-4 Free Download at Start Bootstrap!
+        a.btn.btn-light.btn-xl.sr-button(href="http://startbootstrap.com/template-overviews/creative/") Download Now!
+
+  section#contact
+      .container
+        .row
+          .col-lg-8.mx-auto.text-center
+            h2.section-heading ¡Mantengámonos en contacto!
+            hr.my-4
+            p.mb-5
+              | Llámenos, envíenos un fax o un correo electrónico.
+        .row
+          .col-lg-4.ml-auto.text-center
+            i.fa.fa-phone.fa-3x.mb-3.sr-contact
+            p (57+1)381 6464
+          .col-lg-4.ml-auto.text-center
+            i.fa.fa-fax.fa-3x.mb-3.sr-contact
+            p (57+1)381 6464
+          .col-lg-4.mr-auto.text-center
+            i.fa.fa-envelope-o.fa-3x.mb-3.sr-contact
+            p
+              a(href="rnbp@bibliotecanacional.gov.co") rnbp@bibliotecanacional.gov.co

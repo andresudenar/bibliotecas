@@ -1,0 +1,77 @@
+extends layout
+
+block content
+
+block content
+  nav#mainNav.navbar.navbar-expand-lg.navbar-light.fixed-top
+      .container
+        a.navbar-brand.js-scroll-trigger(href="#page-top") Bibliotecas Públicas
+        button.navbar-toggler.navbar-toggler-right(type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation")
+          span.navbar-toggler-icon
+        #navbarResponsive.collapse.navbar-collapse
+          ul.navbar-nav.ml-auto
+            li.nav-item
+              a.nav-link.js-scroll-trigger(href="#about") acerca de
+            li.nav-item
+              a.nav-link.js-scroll-trigger(href="#mapa") Mapa
+            li.nav-item
+              a.nav-link.js-scroll-trigger(href="#portfolio") Portfolio
+            li.nav-item
+              a.nav-link.js-scroll-trigger(href="#contact") Contact
+  header.masthead.text-center.text-white.d-flex
+      .container.my-auto
+        .row
+          .col-lg-10.mx-auto
+            h1.text-uppercase
+              strong Red Nacional de Bibliotecas Públicas
+            hr
+          .col-lg-8.mx-auto
+            p.text-faded.mb-5
+              | Fomentamos la lectura y la escritura a través del trabajo colaborativo entre la Red Nacional de Bibliotecas Públicas y los bibliotecarios alrededor del país.
+            a.btn.btn-primary.btn-xl.js-scroll-trigger(href="#about") Saber más
+  
+  section#mapa.bg-dark.text-white
+      .container
+        .row
+          .col-lg-12.text-center
+            h2.section-heading Ubicarlas en el mapa.
+            hr.my-4
+      .container
+        .row
+          .col-lg-3.col-md-6.text-center
+            .service-box.mt-5.mx-auto
+              #map
+                script.
+                  // alert(`aquí --> #{data[0].barrio}`);
+                  var mapa = L.map('map').setView([4.0000000, -72.0000000], 5.45);                                                    
+                  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                    {
+                      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> ',
+                      maxZoom: 18,
+                      minZoom: 0,
+                    }).addTo(mapa);
+                  L.geoJson(departamentos).addTo(mapa);
+
+  
+
+  section.bg-dark.text-white
+      .container.text-center
+        h2.mb-4 Free Download at Start Bootstrap!
+        a.btn.btn-light.btn-xl.sr-button(href="http://startbootstrap.com/template-overviews/creative/") Download Now!
+    
+  section#contact
+      .container
+        .row
+          .col-lg-8.mx-auto.text-center
+            h2.section-heading Let's Get In Touch!
+            hr.my-4
+            p.mb-5
+              | Ready to start your next project with us? That's great! Give us a call or send us an email and we will get back to you as soon as possible!
+        .row
+          .col-lg-4.ml-auto.text-center
+            i.fa.fa-phone.fa-3x.mb-3.sr-contact
+            p 123-456-6789
+          .col-lg-4.mr-auto.text-center
+            i.fa.fa-envelope-o.fa-3x.mb-3.sr-contact
+            p
+              a(href="mailto:your-email@your-domain.com") feedback@startbootstrap.com
